@@ -494,7 +494,7 @@ namespace CommandLine
                         }
                     }
 
-                    DisplayHelpVerbText(options, helpInfo, verb);
+                    DisplayHelpVerbText(options, helpInfo, verb, true);
                     return true;
                 }
             }
@@ -502,16 +502,16 @@ namespace CommandLine
             return false;
         }
 
-        private void DisplayHelpVerbText(object options, Pair<MethodInfo, HelpVerbOptionAttribute> helpInfo, string verb)
+        private void DisplayHelpVerbText(object options, Pair<MethodInfo, HelpVerbOptionAttribute> helpInfo, string verb, bool isHelpInvoked = false)
         {
             string helpText;
             if (verb == null)
             {
-                HelpVerbOptionAttribute.InvokeMethod(options, helpInfo, null, out helpText);
+                HelpVerbOptionAttribute.InvokeMethod(options, helpInfo, null, out helpText, isHelpInvoked);
             }
             else
             {
-                HelpVerbOptionAttribute.InvokeMethod(options, helpInfo, verb, out helpText);
+                HelpVerbOptionAttribute.InvokeMethod(options, helpInfo, verb, out helpText, isHelpInvoked);
             }
 
             if (_settings.HelpWriter != null)

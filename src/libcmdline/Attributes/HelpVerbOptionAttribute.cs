@@ -87,7 +87,8 @@ namespace CommandLine
             object target,
             Pair<MethodInfo, HelpVerbOptionAttribute> helpInfo,
             string verb,
-            out string text)
+            out string text,
+            bool isHelpInvoked = false)
         {
             text = null;
             var method = helpInfo.Left;
@@ -97,14 +98,15 @@ namespace CommandLine
                     SR.MemberAccessException_BadSignatureForHelpVerbOptionAttribute.FormatInvariant(method.Name));
             }
 
-            text = (string)method.Invoke(target, new object[] { verb });
+            text = (string)method.Invoke(target, new object[] { verb, isHelpInvoked });
         }
 
         private static bool CheckMethodSignature(MethodInfo value)
         {
-            if (value.ReturnType == typeof(string) && value.GetParameters().Length == 1)
+            if (value.ReturnType == typeof(string) && value.GetParameters().Length == 2)
             {
-                return value.GetParameters()[0].ParameterType == typeof(string);
+                return value.GetParameters()[0].ParameterType == typeof(string)
+					&& value.GetParameters()[1].ParameterType == typeof(bool);
             }
 
             return false;
